@@ -1,0 +1,30 @@
+<html>
+  <p>Available folders:</p>
+  <ul>
+    <li><a href="/folder/<%= Base64.encode64('..') %>">..</a></li>
+    <% @folders.to_a.each do |item| %>
+      <li><a href="/folder/<%= Base64.encode64(item.location) %>"><%= item.name %></a></li>
+    <% end %>
+  </ul>
+
+  <p>Available videos:</p>
+  <table border="1">
+    <thead><th>Name</th><th>1536k stream</th><th>512k stream</th><th>Native HTML5 link</th></thead>
+    <tbody>
+    <% @videos.to_a.each do |item| %>
+      <tr>
+        <td><%= item.name %></td>
+        <td><a href="/play/<%= Base64.encode64(item.location) %>/convert/1536">Convert + Stream @ 1536k</a></td>
+        <td><a href="/play/<%= Base64.encode64(item.location) %>/convert/512">Convert + Stream @ 512k</a></td>
+        <td>
+          <% if item.name.end_with?('.mp4') %>
+            <a href="/play/<%= Base64.encode64(item.location) %>/native/0">stream raw html5</a>
+          <% else %>
+            n/a
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</html>
