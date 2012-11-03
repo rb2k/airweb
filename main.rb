@@ -1,17 +1,22 @@
 require 'rubygems'
-require 'airvideo' #gem install airvideo-ng --> https://github.com/kalw/AirVideo
+require 'bundler/setup'
+require 'airvideo-ng'
 require 'sinatra'
 require "base64"
 
 configure do
-  $airvideo = AirVideo::Client.new('something.dyndns.org',45631,'YOUR_PASSWORD')
+  server_host = 'something.dyndns.org'
+  server_port = 45631
+  server_password = 'YOUR_PASSWORD'
+  raise "You have to enter your server data in the script" if server_host == 'something.dyndns.org'
+  $airvideo = AirVideo::Client.new(server_host,server_port,server_password)
   $airvideo.max_width = 640
   $airvideo.max_height = 480
 end
 
 get '/' do
-	$airvideo.cd('/')
-	items = $airvideo.ls
+  $airvideo.cd('/')
+  items = $airvideo.ls
   @folders = items.select{|item| item.is_a? AirVideo::Client::FolderObject}
   @videos = items.select{|item| item.is_a? AirVideo::Client::VideoObject}
   erb :index
